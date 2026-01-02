@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include <algorithm>
+#include <windows.h>
 #include "field_io.h"
 #include "module.h"
 
@@ -89,7 +90,7 @@ std::vector<std::vector<int>> get_unsolved_field(std::vector<std::vector<int>> f
     return field;
 }
 
-void start_play_random_sudoku(std::vector<std::vector<int>> field, std::vector<std::vector<int>> unsolved_field, int number_empty_squares)
+void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vector<int>> unsolved_field, int number_empty_squares)
 {
     bool isExit = false;
     while (number_empty_squares > 0 && !isExit)
@@ -105,7 +106,7 @@ void start_play_random_sudoku(std::vector<std::vector<int>> field, std::vector<s
             {
                 isExit = true;
                 print_field(unsolved_field, true);
-                clear_lines(27);
+                clear_lines(35);
                 std::cout << "Игра успешно сохранена!\n";
                 continue;
             }
@@ -205,6 +206,7 @@ bool solve_field(std::vector<std::vector<int>> &board)
 }
 void start_solve_field()
 {
+    clear_lines(35);
     std::vector<std::vector<int>> unsolved_field = read_field();
     if (unsolved_field == std::vector<std::vector<int>>{})
     {
@@ -236,9 +238,47 @@ void start_solve_field()
     }
 }
 
+void play_random_sudoku()
+{
+    clear_lines(37);
+    std::mt19937 rng(std::time(nullptr));
+    std::vector<std::vector<int>> field = get_field();
+    int number_empty_squares = rng() % 10 + 25; // Оптимальное кол-во пустых клеток поля
+    std::vector<std::vector<int>> unsolved_field = get_unsolved_field(field, number_empty_squares);
+    print_field(unsolved_field, true);
+    clear_lines(6);
+    print_field(unsolved_field, false);
+    start_play_sudoku(field, unsolved_field, number_empty_squares);
+}
+
+void load_and_play_sudoku()
+{
+    std::vector<std::vector<int>> unsolved_field = read_field();
+    std::vector<std::vector<int>> field = unsolved_field;
+    solve_field(field);
+    int number_empty_squares = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            if (unsolved_field[i][j] == 0)
+            {
+                number_empty_squares++;
+            }
+        }
+    }
+    clear_lines(35);
+    print_field(unsolved_field, false);
+    start_play_sudoku(field, unsolved_field, number_empty_squares);
+}
+
 void menu()
 {
     int operation = 1;
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    enable_ansi();
+
     while (operation != 0)
     {
         std::cout << "\n====================================================\n"
@@ -250,40 +290,15 @@ void menu()
         std::cin >> operation;
         if (operation == 1)
         {
-            clear_lines(37);
-            std::mt19937 rng(std::time(nullptr));
-            std::vector<std::vector<int>> field = get_field();
-            int number_empty_squares = rng() % 10 + 25; // %10 + 25
-            std::vector<std::vector<int>> unsolved_field = get_unsolved_field(field, number_empty_squares);
-            print_field(unsolved_field, true);
-            clear_lines(6);
-            print_field(unsolved_field, false);
-            start_play_random_sudoku(field, unsolved_field, number_empty_squares);
+            play_random_sudoku();
         }
         else if (operation == 2)
         {
-            clear_lines(35);
             start_solve_field();
         }
         else if (operation == 3)
         {
-            std::vector<std::vector<int>> unsolved_field = read_field();
-            std::vector<std::vector<int>> field = unsolved_field;
-            solve_field(field);
-            int number_empty_squares = 0;
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (unsolved_field[i][j] == 0)
-                    {
-                        number_empty_squares++;
-                    }
-                }
-            }
-            clear_lines(35);
-            print_field(unsolved_field, false);
-            start_play_random_sudoku(field, unsolved_field, number_empty_squares);
+            load_and_play_sudoku();
         }
         else if (operation != 0)
         {
