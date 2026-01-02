@@ -60,17 +60,18 @@ std::vector<std::vector<int>> read_field()
     std::vector<std::vector<int>> field(9, std::vector<int>(9, 0));
     int i = 0;
     int k = 0;
-    int nums_count = 0;
+    int nums_count = 0; // Для проверки корректности поля добавляем счётчик чисел
     while (input >> character && i < 9)
     {
 
+        // Когда k == 3 мы полностью считали числа со строки поля. Обнуляем k и переходим к следующей строке.
         if (k == 3)
         {
             i++;
             k = 0;
             for (int index = 0; index < 2; index++)
             {
-                input >> character;
+                input >> character; // Переход между строками
             }
         }
         if (character == "|")
@@ -80,7 +81,9 @@ std::vector<std::vector<int>> read_field()
                 input >> character;
                 if (character == "|")
                 {
-                    return {}; // Поле в файле записано неверно т.к. последний символ палка, возвращаем пустой вектор
+                    // Поле в файле записано неверно т.к. пытаемся считать лишний символ "|"
+                    // Возвращаем пустой вектор
+                    return {};
                 }
                 nums_count++;
                 if (character != ".")

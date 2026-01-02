@@ -3,18 +3,104 @@
 
 #include <vector>
 
-bool isCorrect(const std::vector<std::vector<int>> &field, int i, int j, int square_num);
+/**
+ * @brief Функция проверяет, не нарушает ли число правила Судоку:
+ * @brief- отсутствие такого же числа в текущей строке
+ * @brief- отсутствие такого же числа в текущем столбце
+ * @brief- отсутствие такого же числа в текущем квадрате 3x3
+ *
+ * @param field Игровое поле Судоку 9x9
+ * @param i Индекс строки (0-8)
+ * @param j Индекс столбца (0-8)
+ * @param square_num Проверяемое число (от 1 до 9)
+ * @return true - если число можно поставить в клетку,
+ *         false - если правила Судоку нарушаются
+ */
+bool isCorrect(const std::vector<std::vector<int>> &field,
+               int i,
+               int j,
+               int square_num);
+
+/**
+ * @brief Генерирует полностью заполненное корректное поле Судоку.
+ *
+ * Использует генерацию с возвратом,
+ * чтобы создать валидное решение Судоку 9x9.
+ *
+ * @return Сгенерированное заполненное поле Судоку
+ */
 std::vector<std::vector<int>> get_field();
-std::vector<std::vector<int>> get_unsolved_field(const std::vector<std::vector<int>> field, int number_empty_squares);
 
-void start_play_sudoku(const std::vector<std::vector<int>> field,
-                       std::vector<std::vector<int>> unsolved_field,
-                       int number_empty_squares);
+/**
+ * @brief Случайным образом создаёт игровое поле Судоку с пустыми клетками на основе уже решённого поля.
+ *
+ * @param field Полностью заполненное корректное поле Судоку
+ * @param number_empty_squares Количество клеток, которые нужно сделать пустыми
+ * @return Поле Судоку с пустыми клетками (0 - пустая клетка)
+ */
+std::vector<std::vector<int>> get_unsolved_field(
+    const std::vector<std::vector<int>> field,
+    int number_empty_squares);
 
+/**
+ * @brief Запускает игровой процесс Судоку.
+ *
+ * Пользователь вводит координаты клетки и число.
+ * Возможен выход с сохранением текущего состояния в файл.
+ *
+ * @param field Полное правильное решение Судоку
+ * @param unsolved_field Текущее поле с пустыми клетками
+ * @param number_empty_squares Количество пустых клеток
+ */
+void start_play_sudoku(
+    const std::vector<std::vector<int>> field,
+    std::vector<std::vector<int>> unsolved_field,
+    int number_empty_squares);
+
+/**
+ * @brief Решает Судоку методом перебора с возвратом.
+ * Заполняет все пустые клетки,
+ * если решение существует.
+ *
+ * @param board Поле Судоку для решения
+ * @return true - если Судоку удалось решить,
+ *         false - если решений не существует
+ */
 bool solve_field(std::vector<std::vector<int>> &board);
+
+/**
+ * @brief Считывает Судоку из файла и пытается его решить.
+ *
+ * Проверяет корректность поля,
+ * выводит решение или сообщение об отсутствии решений.
+ */
 void start_solve_field();
-void menu();
+
+/**
+ * @brief Запускает игру со случайно сгенерированным Судоку.
+ *
+ * Генерирует корректное поле и удаляет случайное количество
+ * клеток.
+ */
 void play_random_sudoku();
+
+/**
+ * @brief Загружает сохранённую игру из файла и продолжает игру.
+ *
+ * Считывает поле, автоматически находит решение,
+ * затем позволяет игроку продолжить игру.
+ */
 void load_and_play_sudoku();
+
+/**
+ * @brief Главное меню программы.
+ *
+ * Позволяет выбрать режим:
+ * @brief- игра со случайным Судоку
+ * @brief- решение Судоку из файла
+ * @brief- загрузка сохранённой игры
+ * @brief- выход из программы
+ */
+void menu();
 
 #endif // MODULE_H
