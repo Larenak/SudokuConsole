@@ -215,7 +215,7 @@ void start_solve_field()
     {
         clear_lines(3);
         std::cout << "\nНеверная запись поля! В файл было записано чистое поле."
-                     "Введите ваше Судоку в файл повторно, а затем запустите решение заново.\n";
+                     "Введите ваше Судоку в файл повторно, а затем запустите решение заново.";
         print_field(std::vector<std::vector<int>>(9, std::vector<int>(9, 0)), true); // Запись чистого корректного поля
         return;
     }
@@ -257,7 +257,16 @@ void play_random_sudoku()
 
 void load_and_play_sudoku()
 {
+    clear_lines(35);
     std::vector<std::vector<int>> unsolved_field = read_field();
+    if (unsolved_field == std::vector<std::vector<int>>{})
+    {
+        clear_lines(3);
+        std::cout << "\nНеверная запись поля! В файл было записано чистое поле."
+                     "Введите ваше Судоку в файл повторно, а затем запустите решение заново.";
+        print_field(std::vector<std::vector<int>>(9, std::vector<int>(9, 0)), true); // Запись чистого корректного поля
+        return;
+    }
     std::vector<std::vector<int>> field = unsolved_field;
     solve_field(field);
     int number_empty_squares = 0;

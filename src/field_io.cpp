@@ -78,21 +78,28 @@ std::vector<std::vector<int>> read_field()
         {
             for (int j = 0; j < 3; j++)
             {
-                input >> character;
-                if (character == "|")
+                try
                 {
-                    // Поле в файле записано неверно т.к. пытаемся считать лишний символ "|"
-                    // Возвращаем пустой вектор
+                    input >> character;
+                    if (character == "|")
+                    {
+                        // Поле в файле записано неверно т.к. пытаемся считать лишний символ "|"
+                        // Возвращаем пустой вектор
+                        return {};
+                    }
+                    nums_count++;
+                    if (character != ".")
+                    {
+                        field[i][j + k * 3] = stoi(character);
+                    }
+                    else
+                    {
+                        field[i][j + k * 3] = 0;
+                    }
+                }
+                catch (...)
+                {
                     return {};
-                }
-                nums_count++;
-                if (character != ".")
-                {
-                    field[i][j + k * 3] = stoi(character);
-                }
-                else
-                {
-                    field[i][j + k * 3] = 0;
                 }
             }
             k++;
