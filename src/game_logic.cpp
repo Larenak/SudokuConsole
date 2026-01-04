@@ -3,6 +3,7 @@
 #include <ctime>
 #include <algorithm>
 #include <windows.h>
+#include <sstream>
 #include "field_io.h"
 #include "game_logic.h"
 
@@ -97,24 +98,25 @@ std::vector<std::vector<int>> get_unsolved_field(std::vector<std::vector<int>> f
 void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vector<int>> unsolved_field, int number_empty_squares)
 {
     bool isExit = false;
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (number_empty_squares > 0 && !isExit)
     {
         std::cout << "\nВведите через пробел номер ряда(число над доской) и строки(число слева от доски) клетки, в которую хотите ввести значение."
                      " Или введите \"0 0\", если хотите сохраниться и выйти: \n";
         int i = 0;
         int j = 0;
-
+        std::string line;
         while ((i < 1 || i > 9 || j < 1 || j > 9) && (!isExit))
         {
-            std::cin >> i >> j;
-            if (std::cin.fail())
+            std::getline(std::cin, line);
+
+            std::stringstream ss(line);
+            if (!(ss >> i >> j) || ss >> std::ws && !ss.eof())
             {
+                clear_lines(2);
+                std::cout << "Ошибка ввода! Введите снова:\n";
                 i = 0;
                 j = 0;
-                clear_lines(2);
-                std::cout << "Недопустимые значения! Введите снова:\n";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 continue;
             }
 
@@ -143,19 +145,32 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
         {
             continue;
         }
-        clear_lines(4);
+        clear_lines(3);
         // Уменьшаем на 1 т.к. нумерация элементов вектора начинается с 0
         i--;
         j--;
         std::cout << "\nВведите число от 1 до 9:\n";
         int value = 0;
+
         while (value > 9 || value < 1)
         {
-            std::cin >> value;
+
+            std::string number;
+
+            std::getline(std::cin, number);
+
+            std::stringstream ss(number);
+            if (!(ss >> value) || ss >> std::ws && !ss.eof())
+            {
+                clear_lines(2);
+                std::cout << "Недопустимое значение! Ввод не является числом. Введите снова :\n";
+                continue;
+            }
             if (value > 9 || value < 1)
             {
                 clear_lines(2);
                 std::cout << "Недопустимое значение! Число не находится в диапазоне от 1 до 9. Введите снова:\n";
+                continue;
             }
         }
         clear_lines(2);
@@ -338,14 +353,14 @@ void menu()
                      "3. Загрузить игру из файла.\n"
                      "0. Выход\n";
 
-        std::cin >> operation;
-        if (std::cin.fail())
+        std::string line;
+        std::getline(std::cin, line);
+        std::stringstream ss(line);
+        if (!(ss >> operation) || ss >> std::ws && !ss.eof())
         {
+            clear_lines(8);
+            std::cout << "Ошибка ввода! Введите снова.";
             operation = 1;
-            clear_lines(38);
-            std::cout << "\nНедопустимая операция! Введите снова.";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
 
