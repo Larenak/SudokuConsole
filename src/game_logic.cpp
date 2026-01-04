@@ -81,10 +81,14 @@ std::vector<std::vector<int>> get_field()
 std::vector<std::vector<int>> get_unsolved_field(std::vector<std::vector<int>> field, int number_empty_squares)
 {
     std::mt19937 random(std::time(nullptr));
-    for (int i = 0; i < number_empty_squares; i++)
+    while (number_empty_squares != 0)
     {
         int index_empty_square = random() % 81;
-        field[index_empty_square / 9][index_empty_square % 9] = 0;
+        if (field[index_empty_square / 9][index_empty_square % 9] != 0)
+        {
+            field[index_empty_square / 9][index_empty_square % 9] = 0;
+            number_empty_squares--;
+        }
     }
     print_field(field, true);
     return field;
