@@ -98,11 +98,10 @@ std::vector<std::vector<int>> get_unsolved_field(std::vector<std::vector<int>> f
 void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vector<int>> unsolved_field, int number_empty_squares)
 {
     bool isExit = false;
-    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (number_empty_squares > 0 && !isExit)
     {
-        std::cout << "\nВведите через пробел номер ряда(число над доской) и строки(число слева от доски) клетки, в которую хотите ввести значение."
-                     " Или введите \"0 0\", если хотите сохраниться и выйти: \n";
+        std::cout << "\nВведите через пробел номера столбца и строки клетки, в которую хотите ввести значение."
+                     " \nИли введите \"0 0\", если хотите сохраниться и выйти: \n";
         int i = 0;
         int j = 0;
         std::string line;
@@ -113,8 +112,8 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
             std::stringstream ss(line);
             if (!(ss >> i >> j) || ss >> std::ws && !ss.eof())
             {
-                clear_lines(2);
-                std::cout << "Ошибка ввода! Введите снова:\n";
+                clear_lines(4);
+                std::cout << "\n\nОшибка ввода! Введите снова:\n";
                 i = 0;
                 j = 0;
                 continue;
@@ -124,7 +123,7 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
             {
                 isExit = true;
                 print_field(unsolved_field, true);
-                clear_lines(35);
+                clear_lines(36);
                 std::cout << "\nИгра успешно сохранена!";
                 continue;
             }
@@ -145,7 +144,7 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
         {
             continue;
         }
-        clear_lines(3);
+        clear_lines(4);
         // Уменьшаем на 1 т.к. нумерация элементов вектора начинается с 0
         i--;
         j--;
@@ -178,13 +177,13 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
         {
             unsolved_field[j][i] = value;
             number_empty_squares--;
-            clear_lines(24);
+            clear_lines(25);
             print_field(unsolved_field, true);
             print_field(unsolved_field, false);
         }
         else
         {
-            clear_lines(24);
+            clear_lines(25);
             print_field(unsolved_field, true);
             print_field(unsolved_field, false);
             std::cout << "Неверное значение!";
@@ -192,7 +191,7 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
     }
     if (!isExit) // Возможное сообщение о победе только тогда, когда пользователь не вышел из игры
     {
-        clear_lines(24);
+        clear_lines(25);
         print_field(field, false);
         std::cout << "\nУ вас получилось!";
     }
@@ -239,7 +238,7 @@ bool solve_field(std::vector<std::vector<int>> &unsolved_field)
 }
 void start_solve_field()
 {
-    clear_lines(35);
+    clear_lines(36);
     std::vector<std::vector<int>> unsolved_field = read_field();
     if (unsolved_field == std::vector<std::vector<int>>{})
     {
@@ -274,7 +273,7 @@ void start_solve_field()
 
 void play_random_sudoku()
 {
-    clear_lines(37);
+    clear_lines(38);
     std::mt19937 random(std::time(nullptr));
     std::vector<std::vector<int>> field = get_field();
     int number_empty_squares = random() % 10 + 30; // Оптимальное кол-во пустых клеток поля (чем больше, тем сложнее игра)
@@ -287,7 +286,7 @@ void play_random_sudoku()
 
 void load_and_play_sudoku()
 {
-    clear_lines(40);
+    clear_lines(41);
     std::vector<std::vector<int>> unsolved_field = read_field();
     if (unsolved_field == std::vector<std::vector<int>>{})
     {
@@ -325,13 +324,13 @@ void load_and_play_sudoku()
                 }
             }
         }
-        clear_lines(40);
+        clear_lines(41);
         print_field(unsolved_field, false);
         start_play_sudoku(field, unsolved_field, number_empty_squares);
     }
     else
     {
-        clear_lines(38);
+        clear_lines(39);
         print_field(unsolved_field, false);
         std::cout << "\nРешений у данного Судоку нет.";
     }
