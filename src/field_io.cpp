@@ -56,6 +56,8 @@ void print_field(std::vector<std::vector<int>> field, bool isInFile)
 std::vector<std::vector<int>> read_field()
 {
     std::ifstream input("field.txt");
+    if (!input.is_open())
+        return {};
     std::string character;
     std::vector<std::vector<int>> field(9, std::vector<int>(9, 0));
     int i = 0;
