@@ -62,11 +62,11 @@ void start_play_sudoku(
  * Заполняет все пустые клетки,
  * если решение существует.
  *
- * @param board Поле Судоку для решения
+ * @param unsolved_field Поле Судоку для решения
  * @return true - если Судоку удалось решить,
  *         false - если решений не существует
  */
-bool solve_field(std::vector<std::vector<int>> &board);
+bool solve_field(std::vector<std::vector<int>> &unsolved_field);
 
 /**
  * @brief Считывает Судоку из файла и пытается его решить.

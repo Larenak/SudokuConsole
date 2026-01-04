@@ -16,11 +16,11 @@ bool isCorrect(const std::vector<std::vector<int>> &field, int i, int j, int squ
         if (field[k][j] == square_num && k != i)
             return false;
 
-    int bi = (i / 3) * 3;
-    int bj = (j / 3) * 3;
-    for (int di = 0; di < 3; di++)
-        for (int dj = 0; dj < 3; dj++)
-            if (field[bi + di][bj + dj] == square_num && (bi + di != i || bj + dj != j))
+    int block_i = (i / 3) * 3;
+    int block_j = (j / 3) * 3;
+    for (int iOffset = 0; iOffset < 3; iOffset++)
+        for (int jOffset = 0; jOffset < 3; jOffset++)
+            if (field[block_i + iOffset][block_j + jOffset] == square_num && (block_i + iOffset != i || block_j + jOffset != j))
                 return false;
 
     return true;
@@ -28,7 +28,7 @@ bool isCorrect(const std::vector<std::vector<int>> &field, int i, int j, int squ
 
 std::vector<std::vector<int>> get_field()
 {
-    std::mt19937 rng(std::time(nullptr));
+    std::mt19937 random(std::time(nullptr));
     std::vector<std::vector<int>> field(9, std::vector<int>(9, 0));
     std::vector<std::vector<int>> used_numbers(9, std::vector<int>(9, 0));
     int i = 0;
@@ -38,7 +38,7 @@ std::vector<std::vector<int>> get_field()
         bool placed = false;
 
         std::vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        std::shuffle(nums.begin(), nums.end(), rng);
+        std::shuffle(nums.begin(), nums.end(), random);
 
         for (int square_num : nums)
         {
@@ -80,10 +80,10 @@ std::vector<std::vector<int>> get_field()
 }
 std::vector<std::vector<int>> get_unsolved_field(std::vector<std::vector<int>> field, int number_empty_squares)
 {
-    std::mt19937 rng(std::time(nullptr));
+    std::mt19937 random(std::time(nullptr));
     for (int i = 0; i < number_empty_squares; i++)
     {
-        int index_empty_square = rng() % 81;
+        int index_empty_square = random() % 81;
         field[index_empty_square / 9][index_empty_square % 9] = 0;
     }
     print_field(field, true);
@@ -167,13 +167,13 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
         std::cout << "\nУ вас получилось!";
     }
 }
-bool solve_field(std::vector<std::vector<int>> &board)
+bool solve_field(std::vector<std::vector<int>> &unsolved_field)
 {
 
     std::vector<std::pair<int, int>> empty_cells;
     for (int r = 0; r < 9; r++)
         for (int c = 0; c < 9; c++)
-            if (board[r][c] == 0)
+            if (unsolved_field[r][c] == 0)
                 empty_cells.push_back({r, c});
 
     int index = 0;
@@ -183,12 +183,12 @@ bool solve_field(std::vector<std::vector<int>> &board)
         int j = empty_cells[index].second;
         bool found = false;
         // Начинаем подбор со следующего числа, чтобы не повторять уже проверенные варианты
-        int start = board[i][j] + 1;
+        int start = unsolved_field[i][j] + 1;
         for (int num = start; num <= 9; num++)
         {
-            if (isCorrect(board, i, j, num))
+            if (isCorrect(unsolved_field, i, j, num))
             {
-                board[i][j] = num;
+                unsolved_field[i][j] = num;
                 found = true;
                 break;
             }
@@ -199,7 +199,7 @@ bool solve_field(std::vector<std::vector<int>> &board)
         }
         else
         {
-            board[i][j] = 0;
+            unsolved_field[i][j] = 0;
             index--;
             if (index < 0)
                 return false;
@@ -245,9 +245,9 @@ void start_solve_field()
 void play_random_sudoku()
 {
     clear_lines(37);
-    std::mt19937 rng(std::time(nullptr));
+    std::mt19937 random(std::time(nullptr));
     std::vector<std::vector<int>> field = get_field();
-    int number_empty_squares = rng() % 10 + 30; // Оптимальное кол-во пустых клеток поля (чем больше, тем сложнее игра)
+    int number_empty_squares = random() % 10 + 30; // Оптимальное кол-во пустых клеток поля (чем больше, тем сложнее игра)
     std::vector<std::vector<int>> unsolved_field = get_unsolved_field(field, number_empty_squares);
     print_field(unsolved_field, true);
     clear_lines(6);
