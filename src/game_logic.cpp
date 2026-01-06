@@ -198,7 +198,17 @@ void start_play_sudoku(std::vector<std::vector<int>> field, std::vector<std::vec
 }
 bool solve_field(std::vector<std::vector<int>> &unsolved_field)
 {
-
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            if (unsolved_field[i][j] != 0)
+            {
+                if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j]))
+                    return false;
+            }
+        }
+    }
     std::vector<std::pair<int, int>> empty_cells;
     for (int r = 0; r < 9; r++)
         for (int c = 0; c < 9; c++)
