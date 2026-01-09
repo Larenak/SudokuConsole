@@ -204,7 +204,7 @@ bool solve_field(std::vector<std::vector<int>> &unsolved_field)
         {
             if (unsolved_field[i][j] != 0)
             {
-                if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j]))
+                if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j]) || unsolved_field[i][j] > 9 || unsolved_field[i][j] < 1)
                     return false;
             }
         }
@@ -263,7 +263,7 @@ void start_solve_field()
     {
         for (int j = 0; j < 9; j++)
         {
-            if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j] && (unsolved_field[i][j] < 1 || unsolved_field[i][j] > 9)))
+            if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j]))
             {
                 isSolved = false;
             }
@@ -314,7 +314,7 @@ void load_and_play_sudoku()
     {
         for (int j = 0; j < 9; j++)
         {
-            if (!isCorrect(field, i, j, unsolved_field[i][j]) || (unsolved_field[i][j] < 1 || unsolved_field[i][j] > 9))
+            if (!isCorrect(field, i, j, unsolved_field[i][j]))
             {
                 isSolved = false;
             }
