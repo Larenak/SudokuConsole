@@ -263,7 +263,7 @@ void start_solve_field()
     {
         for (int j = 0; j < 9; j++)
         {
-            if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j]))
+            if (!isCorrect(unsolved_field, i, j, unsolved_field[i][j] && (unsolved_field[i][j] < 1 || unsolved_field[i][j] > 9)))
             {
                 isSolved = false;
             }
@@ -314,7 +314,7 @@ void load_and_play_sudoku()
     {
         for (int j = 0; j < 9; j++)
         {
-            if (!isCorrect(field, i, j, unsolved_field[i][j]))
+            if (!isCorrect(field, i, j, unsolved_field[i][j]) || (unsolved_field[i][j] < 1 || unsolved_field[i][j] > 9))
             {
                 isSolved = false;
             }
@@ -388,7 +388,7 @@ void menu()
         else if (operation != 0)
         {
             clear_lines(9);
-            std::cout << "\nНеверный режим! Попробуйте снвоа.";
+            std::cout << "\nНеверный режим! Попробуйте снова.";
         }
     }
 }
