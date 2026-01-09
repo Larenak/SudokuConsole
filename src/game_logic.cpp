@@ -388,7 +388,7 @@ void menu()
         else if (operation != 0)
         {
             clear_lines(9);
-            std::cout << "\nНеверный режим! Попробуйте снвоа.";
+            std::cout << "\nНеверный режим! Попробуйте снова.";
         }
     }
 }
